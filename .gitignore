@@ -1,0 +1,29 @@
+# Machine-specific tools and private runtime
+/.codex/
+/.local/
+/references/
+
+# Internal research and evidence; explicitly allow reviewed run instructions.
+/docs/*
+!/docs/development/
+/docs/development/*
+!/docs/development/LOCAL-RUN.md
+!/docs/development/LOCAL-RUN.ko.md
+.env
+.env.*
+!.env.example
+node_modules/
+*.log
+*.pid
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.sqlite-shm
+*.sqlite-wal
+*.sqlite3-shm
+*.sqlite3-wal
+__pycache__/
+.DS_Store
