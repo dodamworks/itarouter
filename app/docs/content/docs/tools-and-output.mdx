@@ -1,0 +1,46 @@
+---
+title: Tools and structured output
+description: Use optional request features only with compatible models.
+---
+
+## Tool calling
+
+In Chat Completions, `tools` describes functions the model may request. It does not upload your implementation or give the gateway permission to run arbitrary application code.
+
+```json
+{
+  "model": "MODEL_ID_FROM_CATALOGUE",
+  "messages": [{"role": "user", "content": "What is the weather in Seoul?"}],
+  "tools": [{
+    "type": "function",
+    "function": {
+      "name": "get_weather",
+      "description": "Get the current weather for a city",
+      "parameters": {
+        "type": "object",
+        "properties": {"city": {"type": "string"}},
+        "required": ["city"]
+      }
+    }
+  }],
+  "tool_choice": "auto"
+}
+```
+
+Use the tool-call ID and function name from the response to match the requested function. Validate the completed arguments in your application, execute only allowed operations, and send the result back in the selected protocol's tool-result format. Do not execute raw model text as code.
+
+The schema permits `none`, `auto`, `required`, and an explicit function selection for Chat Completions, but the selected model may support only a subset.
+
+## Structured output
+
+`response_format` can describe the requested output format. JSON mode and JSON-schema constrained output are different features, and model support varies. A request asking for JSON does not remove the need to validate the response in your application.
+
+For Messages, the tool and system fields have a different shape. For Responses, inspect its own request schema. Do not move fields between formats without checking the endpoint reference.
+
+## Reasoning and token limits
+
+Fields such as `reasoning_effort`, `reasoning`, `max_tokens`, `max_completion_tokens`, and `max_output_tokens` belong to particular formats and model capabilities. A larger output limit can affect the reserved allowance or eventual charge. The reference accepting a field does not guarantee support from every model.
+
+## First integration sequence
+
+Start with a plain, non-streaming text request. Once it works, add one optional feature at a time and confirm both the response shape and usage record. This makes unsupported parameters and client parsing issues easier to isolate.

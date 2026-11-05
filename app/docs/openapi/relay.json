@@ -1,0 +1,1414 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ItaRouter API reference",
+    "version": "preview",
+    "description": "Reference derived from the bundled New API relay specification. Endpoint documentation is not a live model-availability guarantee. Model access is being prepared."
+  },
+  "servers": [
+    {
+      "url": "https://itarouter.com",
+      "description": "Public service address; inference access is being prepared."
+    }
+  ],
+  "paths": {
+    "/v1/models": {
+      "get": {
+        "deprecated": false,
+        "operationId": "listModels",
+        "tags": [
+          "API reference"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelsResponse"
+                },
+                "example": {
+                  "object": "list",
+                  "data": [
+                    {
+                      "id": "MODEL_ID_FROM_CATALOGUE",
+                      "object": "model",
+                      "created": 0,
+                      "owned_by": "example-provider"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {},
+            "description": "Successful response."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {},
+            "description": "Request could not be completed. Read the error body for details."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List models",
+        "description": "List model IDs visible to your API key in the OpenAI-compatible format."
+      }
+    },
+    "/v1/chat/completions": {
+      "post": {
+        "deprecated": false,
+        "operationId": "createChatCompletion",
+        "tags": [
+          "API reference"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatCompletionRequest"
+              },
+              "example": {
+                "model": "MODEL_ID_FROM_CATALOGUE",
+                "messages": [
+                  {
+                    "role": "user",
+                    "content": "Hello"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatCompletionResponse"
+                },
+                "example": {
+                  "id": "chatcmpl-example",
+                  "object": "chat.completion",
+                  "created": 0,
+                  "model": "MODEL_ID_FROM_CATALOGUE",
+                  "choices": [
+                    {
+                      "index": 0,
+                      "message": {
+                        "role": "assistant",
+                        "content": "Hello"
+                      },
+                      "finish_reason": "stop"
+                    }
+                  ],
+                  "usage": {
+                    "prompt_tokens": 5,
+                    "completion_tokens": 1,
+                    "total_tokens": 6
+                  }
+                }
+              }
+            },
+            "headers": {},
+            "description": "Successful response."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {},
+            "description": "Request could not be completed. Read the error body for details."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {},
+            "description": "Request could not be completed. Read the error body for details."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Chat completions",
+        "description": "Generate a response from a message history. Optional parameters depend on the selected model and channel."
+      }
+    },
+    "/v1/responses": {
+      "post": {
+        "deprecated": false,
+        "operationId": "createResponse",
+        "tags": [
+          "API reference"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResponsesRequest"
+              },
+              "example": {
+                "model": "MODEL_ID_FROM_CATALOGUE",
+                "input": "Hello"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsesResponse"
+                },
+                "example": {
+                  "id": "resp_example",
+                  "object": "response",
+                  "status": "completed",
+                  "model": "MODEL_ID_FROM_CATALOGUE",
+                  "output": [
+                    {
+                      "type": "message",
+                      "role": "assistant",
+                      "content": [
+                        {
+                          "type": "output_text",
+                          "text": "Hello"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {},
+            "description": "Successful response."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Responses",
+        "description": "Create a response using the Responses request format. Conversation state and advanced features depend on the connected model and channel."
+      }
+    },
+    "/v1/messages": {
+      "post": {
+        "deprecated": false,
+        "operationId": "createMessage",
+        "tags": [
+          "API reference"
+        ],
+        "parameters": [
+          {
+            "name": "anthropic-version",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API format version, for example 2023-06-01.",
+            "example": "2023-06-01"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "An ItaRouter-issued API key."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaudeRequest"
+              },
+              "example": {
+                "model": "MODEL_ID_FROM_CATALOGUE",
+                "max_tokens": 256,
+                "messages": [
+                  {
+                    "role": "user",
+                    "content": "Hello"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaudeResponse"
+                },
+                "example": {
+                  "id": "msg_example",
+                  "type": "message",
+                  "role": "assistant",
+                  "model": "MODEL_ID_FROM_CATALOGUE",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Hello"
+                    }
+                  ],
+                  "stop_reason": "end_turn",
+                  "usage": {
+                    "input_tokens": 5,
+                    "output_tokens": 1
+                  }
+                }
+              }
+            },
+            "headers": {},
+            "description": "Successful response."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Messages",
+        "description": "Use the Anthropic-compatible Messages request format. Supply anthropic-version and an ItaRouter API key."
+      }
+    },
+    "/v1/embeddings": {
+      "post": {
+        "deprecated": false,
+        "operationId": "createEmbedding",
+        "tags": [
+          "API reference"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmbeddingRequest"
+              },
+              "example": {
+                "model": "EMBEDDING_MODEL_ID_FROM_CATALOGUE",
+                "input": "Text to embed"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmbeddingResponse"
+                },
+                "example": {
+                  "object": "list",
+                  "data": [
+                    {
+                      "object": "embedding",
+                      "index": 0,
+                      "embedding": [
+                        0.1,
+                        -0.2,
+                        0.3
+                      ]
+                    }
+                  ],
+                  "model": "EMBEDDING_MODEL_ID_FROM_CATALOGUE",
+                  "usage": {
+                    "prompt_tokens": 3,
+                    "total_tokens": 3
+                  }
+                }
+              }
+            },
+            "headers": {},
+            "description": "Successful response."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Embeddings",
+        "description": "Convert text into vectors using an available embedding model."
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "ItaRouter API key, not a browser login token."
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "ItaRouter key for the Messages format."
+      }
+    },
+    "schemas": {
+      "ModelsResponse": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Model"
+            }
+          }
+        }
+      },
+      "Model": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string"
+          },
+          "created": {
+            "type": "integer"
+          },
+          "owned_by": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "param": {
+                "type": "string",
+                "nullable": true
+              },
+              "code": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        }
+      },
+      "ChatCompletionRequest": {
+        "type": "object",
+        "required": [
+          "model",
+          "messages"
+        ],
+        "properties": {
+          "model": {
+            "type": "string",
+            "example": "MODEL_ID_FROM_CATALOGUE"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          },
+          "temperature": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 2,
+            "default": 1
+          },
+          "top_p": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 1
+          },
+          "n": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1
+          },
+          "stream": {
+            "type": "boolean",
+            "default": false
+          },
+          "stream_options": {
+            "type": "object",
+            "properties": {
+              "include_usage": {
+                "type": "boolean"
+              }
+            }
+          },
+          "stop": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "integer"
+          },
+          "max_completion_tokens": {
+            "type": "integer"
+          },
+          "presence_penalty": {
+            "type": "number",
+            "minimum": -2,
+            "maximum": 2,
+            "default": 0
+          },
+          "frequency_penalty": {
+            "type": "number",
+            "minimum": -2,
+            "maximum": 2,
+            "default": 0
+          },
+          "logit_bias": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            },
+            "properties": {}
+          },
+          "user": {
+            "type": "string"
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tool"
+            }
+          },
+          "tool_choice": {
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "auto",
+                  "required"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "function": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "response_format": {
+            "$ref": "#/components/schemas/ResponseFormat"
+          },
+          "seed": {
+            "type": "integer"
+          },
+          "reasoning_effort": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "modalities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "text",
+                "audio"
+              ]
+            }
+          },
+          "audio": {
+            "type": "object",
+            "properties": {
+              "voice": {
+                "type": "string"
+              },
+              "format": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "required": [
+          "role",
+          "content"
+        ],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "system",
+              "user",
+              "assistant",
+              "tool",
+              "developer"
+            ]
+          },
+          "content": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MessageContent"
+                }
+              }
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "tool_calls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ToolCall"
+            }
+          },
+          "tool_call_id": {
+            "type": "string"
+          },
+          "reasoning_content": {
+            "type": "string"
+          }
+        }
+      },
+      "MessageContent": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "text",
+              "image_url",
+              "input_audio",
+              "file",
+              "video_url"
+            ]
+          },
+          "text": {
+            "type": "string"
+          },
+          "image_url": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "detail": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "high",
+                  "auto"
+                ]
+              }
+            }
+          },
+          "input_audio": {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "string"
+              },
+              "format": {
+                "type": "string",
+                "enum": [
+                  "wav",
+                  "mp3"
+                ]
+              }
+            }
+          },
+          "file": {
+            "type": "object",
+            "properties": {
+              "filename": {
+                "type": "string"
+              },
+              "file_data": {
+                "type": "string"
+              },
+              "file_id": {
+                "type": "string"
+              }
+            }
+          },
+          "video_url": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "ToolCall": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "function": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "arguments": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "Tool": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "function": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        }
+      },
+      "ResponseFormat": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "text",
+              "json_object",
+              "json_schema"
+            ]
+          },
+          "json_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "ChatCompletionResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string"
+          },
+          "created": {
+            "type": "integer"
+          },
+          "model": {
+            "type": "string",
+            "example": "MODEL_ID_FROM_CATALOGUE"
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "index": {
+                  "type": "integer"
+                },
+                "message": {
+                  "$ref": "#/components/schemas/Message"
+                },
+                "finish_reason": {
+                  "type": "string",
+                  "enum": [
+                    "stop",
+                    "length",
+                    "tool_calls",
+                    "content_filter"
+                  ]
+                }
+              }
+            }
+          },
+          "usage": {
+            "$ref": "#/components/schemas/Usage"
+          },
+          "system_fingerprint": {
+            "type": "string"
+          }
+        }
+      },
+      "Usage": {
+        "type": "object",
+        "properties": {
+          "prompt_tokens": {
+            "type": "integer"
+          },
+          "completion_tokens": {
+            "type": "integer"
+          },
+          "total_tokens": {
+            "type": "integer"
+          },
+          "prompt_tokens_details": {
+            "type": "object",
+            "properties": {
+              "cached_tokens": {
+                "type": "integer"
+              },
+              "text_tokens": {
+                "type": "integer"
+              },
+              "audio_tokens": {
+                "type": "integer"
+              },
+              "image_tokens": {
+                "type": "integer"
+              }
+            }
+          },
+          "completion_tokens_details": {
+            "type": "object",
+            "properties": {
+              "text_tokens": {
+                "type": "integer"
+              },
+              "audio_tokens": {
+                "type": "integer"
+              },
+              "reasoning_tokens": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "ResponsesRequest": {
+        "type": "object",
+        "required": [
+          "model"
+        ],
+        "properties": {
+          "model": {
+            "type": "string",
+            "example": "MODEL_ID_FROM_CATALOGUE"
+          },
+          "input": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            ]
+          },
+          "instructions": {
+            "type": "string"
+          },
+          "max_output_tokens": {
+            "type": "integer"
+          },
+          "temperature": {
+            "type": "number"
+          },
+          "top_p": {
+            "type": "number"
+          },
+          "stream": {
+            "type": "boolean"
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "tool_choice": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {}
+              }
+            ]
+          },
+          "reasoning": {
+            "type": "object",
+            "properties": {
+              "effort": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              "summary": {
+                "type": "string"
+              }
+            }
+          },
+          "previous_response_id": {
+            "type": "string"
+          },
+          "truncation": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "disabled"
+            ]
+          }
+        }
+      },
+      "ResponsesResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "completed",
+              "failed",
+              "in_progress",
+              "incomplete"
+            ]
+          },
+          "model": {
+            "type": "string",
+            "example": "MODEL_ID_FROM_CATALOGUE"
+          },
+          "output": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "text": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "usage": {
+            "$ref": "#/components/schemas/Usage"
+          }
+        }
+      },
+      "ClaudeRequest": {
+        "type": "object",
+        "required": [
+          "model",
+          "messages",
+          "max_tokens"
+        ],
+        "properties": {
+          "model": {
+            "type": "string",
+            "example": "MODEL_ID_FROM_CATALOGUE"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClaudeMessage"
+            }
+          },
+          "system": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            ]
+          },
+          "cache_control": {
+            "type": "object",
+            "properties": {}
+          },
+          "inference_geo": {
+            "type": "string"
+          },
+          "max_tokens": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "temperature": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "top_p": {
+            "type": "number"
+          },
+          "top_k": {
+            "type": "integer"
+          },
+          "stream": {
+            "type": "boolean"
+          },
+          "stop_sequences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "input_schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "tool_choice": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "auto",
+                      "any",
+                      "tool",
+                      "none"
+                    ]
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            ]
+          },
+          "thinking": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "enabled",
+                  "disabled"
+                ]
+              },
+              "budget_tokens": {
+                "type": "integer"
+              }
+            }
+          },
+          "context_management": {
+            "type": "object",
+            "properties": {}
+          },
+          "output_config": {
+            "type": "object",
+            "properties": {}
+          },
+          "output_format": {
+            "type": "object",
+            "properties": {}
+          },
+          "container": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {}
+              }
+            ]
+          },
+          "mcp_servers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "user_id": {
+                "type": "string"
+              }
+            }
+          },
+          "speed": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "fast"
+            ]
+          },
+          "service_tier": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "standard_only"
+            ]
+          }
+        }
+      },
+      "ClaudeMessage": {
+        "type": "object",
+        "required": [
+          "role",
+          "content"
+        ],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "assistant"
+            ]
+          },
+          "content": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "image",
+                        "tool_use",
+                        "tool_result"
+                      ]
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "base64",
+                            "url"
+                          ]
+                        },
+                        "media_type": {
+                          "type": "string"
+                        },
+                        "data": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "input": {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    "tool_use_id": {
+                      "type": "string"
+                    },
+                    "content": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "ClaudeResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "model": {
+            "type": "string",
+            "example": "MODEL_ID_FROM_CATALOGUE"
+          },
+          "stop_reason": {
+            "type": "string",
+            "enum": [
+              "end_turn",
+              "max_tokens",
+              "stop_sequence",
+              "tool_use"
+            ]
+          },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "input_tokens": {
+                "type": "integer"
+              },
+              "output_tokens": {
+                "type": "integer"
+              },
+              "cache_creation_input_tokens": {
+                "type": "integer"
+              },
+              "cache_read_input_tokens": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "EmbeddingRequest": {
+        "type": "object",
+        "required": [
+          "model",
+          "input"
+        ],
+        "properties": {
+          "model": {
+            "type": "string",
+            "example": "MODEL_ID_FROM_CATALOGUE"
+          },
+          "input": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "encoding_format": {
+            "type": "string",
+            "enum": [
+              "float",
+              "base64"
+            ],
+            "default": "float"
+          },
+          "dimensions": {
+            "type": "integer"
+          }
+        }
+      },
+      "EmbeddingResponse": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "object": {
+                  "type": "string"
+                },
+                "index": {
+                  "type": "integer"
+                },
+                "embedding": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "model": {
+            "type": "string",
+            "example": "MODEL_ID_FROM_CATALOGUE"
+          },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "prompt_tokens": {
+                "type": "integer"
+              },
+              "total_tokens": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -54,7 +54,7 @@ Use the existing administrator site settings:
 
 These values are stored in each environment's database. Checking out this repository does not apply them automatically. Leave ServerAddress and domain configuration for deployment setup. Preserve upstream attribution and notices.
 
-Assets live in `app/new-api/web/public/brand/`. The favicon uses the same deep teal symbol (`#087F78`), with a 16/32/48px ICO fallback. Brand names use self-hosted Geist 600 with -0.025em letter spacing; body typography is unchanged. The font's OFL notice is in `web/src/assets/fonts/Geist-OFL.txt`.
+Assets live in `app/new-api/web/public/brand/`. The favicon uses the same deep teal symbol (`#087F78`), with a 16/32/48px ICO fallback. The wordmark uses self-hosted Geist 600 with -0.04em letter spacing. The default interface uses self-hosted Geist Sans variable, with Geist Mono for code; CJK text falls back to system fonts. Light and dark defaults use neutral surfaces with deep teal actions. Explicit user font, color, radius and density choices remain available. Decorative uppercase transformations are disabled; English interface labels use sentence casing while acronyms and identifiers keep their spelling. The font's OFL notice is in `web/src/assets/fonts/Geist-OFL.txt`.
 
 Initial HTML title metadata includes `ItaRouter · New API`; the existing runtime SystemName setting controls the browser title after startup. Check the home, sign-in and sign-up screens, then restart to confirm settings persist.
 
@@ -80,8 +80,19 @@ Translations focus on customer screens; some administrator and dynamic text rema
 
 Hiding a menu does not delete a feature or replace server authorization. This preset does not change registration, authentication, security, roles, model pricing, charging or payment settings. A visible Wallet does not enable real payments. Validate email delivery and registration policy before serving customers.
 
+## Customer guidance preset
+
+`config/customer-guidance.json` contains values for the existing site settings: Docs points to `/about`, the existing About page holds an English customer guide, and console announcements/FAQ explain pre-launch availability. Back up and review existing content before applying these values in a local environment. This is a manual preset, not an automatic loader, and applying it locally does not change production.
+
+The wallet keeps its existing balance, top-up and order screens. The referral card and its page-level request/transfer wiring are omitted from the customer wallet; upstream components, server endpoints and stored rewards remain intact. Home guidance uses existing translated customer API-key text. No payment, authentication or quota rules are changed.
+
 ## Verification
 
 Check initial administrator setup, administrator login, customer signup/login, API key and wallet screens, customer denial from administrator APIs, then database and session persistence after restart. An administrator's initial quota is not provider credit or paid customer balance.
 
 Local macOS arm64 verification on 2026-11-04 covered frontend/Go builds, fresh SQLite setup, administrator/customer login, customer administrator API denial (403), restart/session persistence and the customer navigation preset. It did not cover production databases, actual provider calls, email delivery or live payments. Keep runtime data, credentials, logs and session secrets out of Git.
+
+
+## Customer documentation preview
+
+The separate Fumadocs app is in `app/docs`. See [its run instructions](../../app/docs/README.md). Run it on `127.0.0.1:3019`; the main app preview remains on `3018`. Changing the local Docs option is separate from production configuration. `NEXT_PUBLIC_SITE_URL` contains only the public app URL used by documentation links. Static output and the search index are generated with `bun run build` and remain untracked.

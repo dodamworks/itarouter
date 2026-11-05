@@ -1,0 +1,12 @@
+---
+title: Chat completions
+description: Create a response from a conversation.
+---
+
+import { ApiReference } from '@/components/api-reference';
+
+Pass `model` and `messages`. Use `message.content` in a completed response; use `delta` chunks for streaming. Sampling, tools, output format, and token-limit fields must be supported by the selected model.
+
+These fields are generated from the bundled relay specification. Model access is in preparation; this page is a request-format reference, not a successful live request.
+
+<ApiReference path="/v1/chat/completions" method="post" />

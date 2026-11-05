@@ -1,0 +1,80 @@
+---
+title: Connect an app
+description: Set up a compatible client or send a request from your server.
+---
+
+## Values to configure
+
+| Client setting | Value |
+| --- | --- |
+| Service/provider type | A custom OpenAI-compatible service, when using that format |
+| Base URL | `https://itarouter.com/v1` |
+| API key | Your ItaRouter-issued key |
+| Model | An exact available model ID from the catalogue |
+
+Some clients ask for the server origin and add `/v1` themselves. Others require a complete endpoint such as `/v1/chat/completions`. Follow the client's setting label and inspect the resulting URL if you receive a route error.
+
+## Server-side JavaScript
+
+Set `ITAROUTER_API_KEY` in your server environment. Replace the example model ID after model access opens.
+
+```js
+const response = await fetch('https://itarouter.com/v1/chat/completions', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${process.env.ITAROUTER_API_KEY}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    model: 'MODEL_ID_FROM_CATALOGUE',
+    messages: [{ role: 'user', content: 'Hello' }],
+  }),
+});
+if (!response.ok) {
+  throw new Error(`ItaRouter request failed: ${response.status}`);
+}
+const result = await response.json();
+console.log(result.choices?.[0]?.message?.content);
+```
+
+Run this on your server, not in browser JavaScript. Your app should inspect a redacted error response for diagnostics without logging the key or sensitive prompt content.
+
+## Python with the standard library
+
+```python
+import json
+import os
+import urllib.request
+
+request = urllib.request.Request(
+    'https://itarouter.com/v1/chat/completions',
+    data=json.dumps({
+        'model': 'MODEL_ID_FROM_CATALOGUE',
+        'messages': [{'role': 'user', 'content': 'Hello'}],
+    }).encode('utf-8'),
+    headers={
+        'Authorization': f"Bearer {os.environ['ITAROUTER_API_KEY']}",
+        'Content-Type': 'application/json',
+    },
+    method='POST',
+)
+with urllib.request.urlopen(request, timeout=60) as response:
+    result = json.load(response)
+print(result['choices'][0]['message']['content'])
+```
+
+These examples document request construction; they have not made live model calls. For production, handle timeouts and HTTP errors, and choose a timeout appropriate for the model and task.
+
+## Existing SDKs and desktop clients
+
+An SDK or app must allow the base URL, API key, and model to be changed. Setting only a custom model name while leaving the original provider's endpoint will send the request to the wrong service.
+
+The upstream project offers several app-import integrations, but this page does not certify that each app has been tested against ItaRouter. Use a dedicated key and verify the requested model, returned output, and usage record before wider use.
+
+## Connection checklist
+
+1. Confirm the endpoint is ItaRouter, with one `/v1` prefix where required.
+2. Confirm the key is enabled, unexpired, and permitted to use the model.
+3. Confirm the account and key allowance can cover the request.
+4. Send a small non-streaming request first.
+5. Inspect **Usage logs**, then add advanced features one at a time.

@@ -1,0 +1,54 @@
+---
+title: API keys
+description: Create keys, choose limits, and control access for each app.
+---
+
+Use an ItaRouter API key for model requests. Your website password and browser login session are separate credentials; neither should be sent to the model API.
+
+## Create a key
+
+1. Sign in and open **Console → API keys**.
+2. Choose the create action and enter a name that identifies the app or environment.
+3. Review the expiry, quota, group, and advanced restrictions below.
+4. Save the key, then copy it into your server's secret or environment settings.
+
+Create separate keys for development, production, and unrelated apps. This makes it easier to attribute usage or disable one integration without interrupting the others.
+
+## Basic settings
+
+| Setting | Meaning | Suggested starting point |
+| --- | --- | --- |
+| Name | A label used in the console and usage records | An app and environment name |
+| Group | The available routing and pricing group for this key | An available group appropriate for your account |
+| Expiration time | Time after which the key stops authenticating | A deliberate expiry; `Never` only when appropriate |
+| Quantity | Creates several keys with distinct name suffixes | One key while testing |
+
+The account determines which groups you may choose. Changing a key's group can change which channels and prices apply; it does not purchase access to a new provider.
+
+## Quota settings
+
+A limited key has its own remaining allowance. The console may display that allowance in its configured currency or quota unit. **Unlimited quota** removes that key-level allowance check; it does not remove account balance checks or make usage free.
+
+For example, an app can have an unused key allowance while its account wallet is empty. Raising the key allowance will not fix an empty wallet. See [Credits and usage](/docs/credits).
+
+## Advanced restrictions
+
+| Setting | Behaviour |
+| --- | --- |
+| Model limits | Restricts the key to selected model IDs. An empty selection adds no key-specific model restriction; account/channel access still applies |
+| IP whitelist | Allows listed source IPs or CIDR ranges. Enter one per line; empty means no key-specific IP restriction |
+| Allow querying user quota | Lets a holder of this key query account-level remaining and used quota through the corresponding API |
+
+For a server integration, an IP restriction must match the source IP observed by the service. Check your server's outbound network path before enabling it. IP filtering is an extra control, not a substitute for keeping the key secret.
+
+Leave account-quota querying disabled unless your client needs it: it discloses information about the account balance to anyone holding the key.
+
+## Auto groups and retries
+
+Where the **Auto** group is offered, a key can inherit the configured group order or select an allowed custom order. **Cross-group retry** controls retries across those groups. These are routing-group controls; they do not classify the difficulty of your prompt or automatically choose the best AI model.
+
+## Disable, replace, or delete
+
+Use the key list to edit settings or disable a key. Expired, disabled, or exhausted keys cannot make ordinary inference requests. Deleting a key invalidates future requests but does not erase the charges or history it created.
+
+If a key leaks, disable or delete it, create a replacement, update your server, and inspect usage logs. Never include a full usable key in a support message or public issue.

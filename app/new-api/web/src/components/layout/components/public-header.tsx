@@ -1,3 +1,4 @@
+import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
 /*
 Copyright (C) 2023-2026 QuantumNous
 
@@ -16,10 +17,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { IconGithub } from '@/assets/brand-icons'
 import { Dialog } from '@/components/dialog'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { NotificationPopover } from '@/components/notification-popover'
@@ -208,7 +209,7 @@ export function PublicHeader(props: PublicHeaderProps) {
         >
           <nav
             className={cn(
-              'flex items-center justify-between gap-2 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
+              'flex items-center justify-between gap-2 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
               scrolled
                 ? 'bg-background/60 ring-border/50 h-12 rounded-2xl pr-1.5 pl-4 shadow-[0_2px_16px_-6px_rgba(0,0,0,0.08),0_0_0_0.5px_rgba(0,0,0,0.02)] ring-[0.5px] backdrop-blur-2xl dark:shadow-[0_2px_16px_-6px_rgba(0,0,0,0.4)]'
                 : 'h-16 px-2'
@@ -220,11 +221,11 @@ export function PublicHeader(props: PublicHeaderProps) {
                 to={homeUrl}
                 className='group flex min-w-0 items-center gap-2.5'
               >
-                <div className='flex size-7 shrink-0 items-center justify-center transition-all duration-300 group-hover:scale-105'>
+                <div className='flex size-8 shrink-0 items-center justify-center'>
                   {logoContent}
                 </div>
                 <span
-                  className='itarouter-wordmark max-w-48 truncate text-sm'
+                  className='itarouter-wordmark max-w-48 truncate text-xl'
                   title={displaySiteName}
                 >
                   {loading ? (
@@ -253,10 +254,13 @@ export function PublicHeader(props: PublicHeaderProps) {
                       tabIndex={link.disabled ? -1 : undefined}
                       onClick={(event) => handleNavLinkClick(event, link)}
                       className={cn(
-                        'text-muted-foreground hover:text-foreground min-w-0 truncate rounded-lg px-3 py-1.5 text-sm font-medium transition-colors duration-200',
+                        'text-muted-foreground hover:text-foreground inline-flex min-w-0 items-center gap-1.5 truncate rounded-lg px-3 py-1.5 text-sm font-medium transition-colors duration-200',
                         link.disabled && 'pointer-events-none opacity-50'
                       )}
                     >
+                      {link.title === 'GitHub' && (
+                        <IconGithub aria-hidden className='size-4 shrink-0' />
+                      )}
                       {t(link.title)}
                     </a>
                   )
@@ -276,17 +280,16 @@ export function PublicHeader(props: PublicHeaderProps) {
                       link.disabled && 'pointer-events-none opacity-50'
                     )}
                   >
+                    {link.title === 'GitHub' && (
+                      <IconGithub aria-hidden className='size-4 shrink-0' />
+                    )}
                     {t(link.title)}
                   </Link>
                 )
               })}
+            </div>
 
-              {(showLanguageSwitcher ||
-                showThemeSwitch ||
-                showNotifications) && (
-                <div className='bg-border/40 mx-2 h-4 w-px' />
-              )}
-
+            <div className='hidden min-w-0 items-center justify-end gap-0.5 lg:flex'>
               {showLanguageSwitcher && <LanguageSwitcher />}
               {showThemeSwitch && <ThemeSwitch />}
               {showNotifications && (
@@ -312,6 +315,7 @@ export function PublicHeader(props: PublicHeaderProps) {
 
             {/* Mobile: compact actions + hamburger */}
             <div className='flex shrink-0 items-center gap-2 lg:hidden'>
+              {showLanguageSwitcher && <LanguageSwitcher />}
               {showThemeSwitch && <ThemeSwitch />}
               {showAuthButtons && !loading && isAuthenticated && (
                 <ProfileDropdown />
@@ -387,6 +391,9 @@ export function PublicHeader(props: PublicHeaderProps) {
                     className={linkClassName}
                     style={transitionStyle}
                   >
+                    {link.title === 'GitHub' && (
+                      <IconGithub aria-hidden className='size-4 shrink-0' />
+                    )}
                     {t(link.title)}
                   </a>
                 )
@@ -400,6 +407,9 @@ export function PublicHeader(props: PublicHeaderProps) {
                   className={linkClassName}
                   style={transitionStyle}
                 >
+                  {link.title === 'GitHub' && (
+                    <IconGithub aria-hidden className='size-4 shrink-0' />
+                  )}
                   {t(link.title)}
                 </Link>
               )

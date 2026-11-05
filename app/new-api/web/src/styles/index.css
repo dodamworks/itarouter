@@ -30,7 +30,23 @@ For commercial licensing, please contact support@quantumnous.com
 @import './theme.css';
 @import './theme-presets.css';
 
-/* ItaRouter wordmark only; preserve the upstream UI typography. */
+/* Self-hosted variable faces; explicit user font preferences still win. */
+@font-face {
+  font-family: 'ItaRouter Geist UI';
+  src: url('../assets/fonts/Geist-Variable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ItaRouter Geist Mono';
+  src: url('../assets/fonts/GeistMono-Variable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* Keep the established wordmark face and spacing independent of body text. */
 @font-face {
   font-family: 'ItaRouter Geist';
   src: url('../assets/fonts/Geist-SemiBold.woff2') format('woff2');
@@ -42,7 +58,10 @@ For commercial licensing, please contact support@quantumnous.com
 .itarouter-wordmark {
   font-family: 'ItaRouter Geist', sans-serif;
   font-weight: 600;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.04em;
+  font-kerning: normal;
+  font-synthesis: none;
+  line-height: 1.1;
 }
 
 @layer base {
@@ -575,25 +594,7 @@ For commercial licensing, please contact support@quantumnous.com
 /* Micro-interactions — Vercel-style subtle hover/active feedback */
 @media (prefers-reduced-motion: no-preference) {
   [data-slot='card']:not([data-card-hover='false']) {
-    transition:
-      transform 150ms ease,
-      box-shadow 150ms ease;
-  }
-
-  @media (min-width: 641px) {
-    [data-slot='card']:not([data-card-hover='false']):hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgb(0 0 0 / 0.06);
-    }
-
-    .dark [data-slot='card']:not([data-card-hover='false']):hover {
-      box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
-    }
-  }
-
-  button:not(:disabled):active,
-  [role='button']:not(:disabled):active {
-    transform: scale(0.98);
+    transition: border-color 150ms ease;
   }
 
   [data-slot='table'] tr {
@@ -759,4 +760,24 @@ For commercial licensing, please contact support@quantumnous.com
   .auto-group-flow-border {
     display: none;
   }
+}
+
+/* Keep authored sentence casing, including technical acronyms and identifiers. */
+@layer utilities {
+  .uppercase {
+    text-transform: none;
+    letter-spacing: normal;
+  }
+}
+
+/* Balance translated headlines without splitting words or imposing a line break. */
+.itarouter-hero-title {
+  text-wrap: balance;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+.itarouter-hero-title:lang(ko),
+.itarouter-hero-copy:lang(ko) {
+  word-break: keep-all;
 }

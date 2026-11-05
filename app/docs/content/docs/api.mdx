@@ -1,0 +1,54 @@
+---
+title: API overview
+description: Choose a request format and understand authentication and compatibility.
+---
+
+## Service address
+
+For OpenAI-compatible clients that accept a base URL, use the intended public base URL:
+
+```text
+https://itarouter.com/v1
+```
+
+Raw HTTP requests use the full endpoint path shown below. Do not append `/v1` twice. Model access is currently in preparation; the references describe supported request formats in the bundled software, not live supply availability.
+
+## Authentication
+
+Send an ItaRouter-issued API key:
+
+```http
+Authorization: Bearer YOUR_ITAROUTER_KEY
+Content-Type: application/json
+```
+
+The Messages format also accepts `x-api-key` and requires an `anthropic-version` header. The Gemini native format uses its own route and header conventions. Do not put your console login token or an upstream provider key in place of the ItaRouter key.
+
+## Endpoint references
+
+| Method and path | Use | Guide |
+| --- | --- | --- |
+| `GET /v1/models` | List accessible model IDs | [List models](/docs/list-models) |
+| `POST /v1/chat/completions` | Message-based conversations | [Chat completions](/docs/chat-completions) |
+| `POST /v1/responses` | Responses-format input and output | [Responses](/docs/responses) |
+| `POST /v1/messages` | Anthropic-compatible messages | [Messages](/docs/messages) |
+| `POST /v1/embeddings` | Text vectors | [Embeddings](/docs/embeddings) |
+| `POST /v1beta/models/{model}:generateContent` | Gemini-native request format | [Gemini format](/docs/gemini) |
+
+The generated endpoint pages show request fields, response schemas, and code examples. They are derived from the New API specification bundled with ItaRouter. Interactive request execution is disabled in this documentation preview.
+
+## Pick one format first
+
+Use the format your app already supports. Chat Completions returns `choices`; Responses returns `output`; Messages returns typed `content` blocks. These shapes are not interchangeable, even when the selected model family is similar.
+
+Start with a small text request before adding tools, multimodal input, or streaming. See [Connect an app](/docs/integrations) for environment and code examples.
+
+## Optional features
+
+The reference lists fields understood by the gateway format. A model or channel may support only a subset. Check model compatibility before using tools, JSON schema output, reasoning controls, audio, or image input. Native provider features are not guaranteed to survive every format conversion unchanged.
+
+## Responses and errors
+
+Check the HTTP status before parsing a success shape. Error responses can contain an `error` object with `message`, `type`, `param`, and `code`; some routes or providers use other details. Read the body rather than using the status alone to infer the cause.
+
+For incremental responses, follow the [streaming guide](/docs/streaming). For failed requests, use [Troubleshooting](/docs/help).

@@ -67,16 +67,11 @@ export function useTopNavLinks(): TopNavLink[] {
     links.push({ title: t('Home'), href: '/' })
   }
 
-  // Console -> /dashboard (new console path)
-  if (modules?.console !== false) {
-    links.push({ title: t('Console'), href: '/dashboard' })
-  }
-
   // Pricing
   const pricing = modules?.pricing
   if (pricing && typeof pricing === 'object' && pricing.enabled) {
     const requiresAuth = pricing.requireAuth && !isAuthed
-    links.push({ title: t('Model Square'), href: '/pricing', requiresAuth })
+    links.push({ title: t('Models'), href: '/pricing', requiresAuth })
   }
 
   // Rankings
@@ -99,6 +94,17 @@ export function useTopNavLinks(): TopNavLink[] {
   if (modules?.about !== false) {
     links.push({ title: t('About'), href: '/about' })
   }
+
+  // Console -> /dashboard (new console path)
+  if (modules?.console !== false) {
+    links.push({ title: t('Console'), href: '/dashboard' })
+  }
+
+  links.push({
+    title: 'GitHub',
+    href: 'https://github.com/dodamworks/itarouter',
+    external: true,
+  })
 
   return links
 }

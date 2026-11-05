@@ -1,0 +1,43 @@
+---
+title: Credits and usage
+description: Understand wallet credit, key allowance, reservations, and final charges.
+---
+
+## Wallet credit and key allowance
+
+Your account wallet is the funding source for API usage. A key's allowance is a separate access limit. Creating a key does not transfer money into a second wallet.
+
+| Situation | What it means |
+| --- | --- |
+| Wallet has credit, key has no remaining allowance | That limited key can be rejected |
+| Key allowance remains, wallet is empty | More key allowance does not fund the request |
+| Key is unlimited | The key-level allowance is bypassed; account funding and other restrictions still apply |
+| Key expires or is disabled | Increasing the wallet does not reactivate it |
+
+Paid top-ups are not available yet. Payment methods, minimums, refund terms, and credit policies will be published before paid use opens.
+
+## How a request is charged
+
+The bundled billing flow supports reserving an estimated allowance before submission and settling against the final calculated usage. Settlement may charge an additional difference or release an unused reservation. This is different from a purchase refund.
+
+A very low balance can prevent a request from starting even when you expect a short answer. Check both the account funding and the key limit. Do not assume a temporary reservation is the final charge.
+
+## Understand the billing unit
+
+Token-billed models can distinguish input, output, cached input, reasoning, and modality-specific usage. Other models can use a per-request or other unit. Group pricing and configured model prices also affect the result.
+
+For a simple hypothetical token price, a rate of `$R per 1,000,000 tokens` applied to `T tokens` contributes `T / 1,000,000 × R`. This is only the unit conversion; it is not an ItaRouter tariff or a full formula for every model.
+
+## Check the final record
+
+Open **Usage logs**, filter by time, model, or key as available, and inspect the charge details. Compare the exact model, input/output token counts, group, billing unit, and final cost. See [Usage logs](/docs/usage-logs).
+
+## Failures, retries, and interrupted streams
+
+The implementation includes reservation refund paths for failed submissions, but that is not a promise that every failed, retried, cancelled, or disconnected request costs zero. A provider may already have performed work before the client loses its connection. Billing depends on the completed processing and applicable policy.
+
+Avoid retrying blindly after a timeout: a second submission can be a separate request. Use the response and usage history to investigate what happened.
+
+## Orders and payment history
+
+The wallet interface can display top-up and billing history through existing New API features. It does not mean a payment provider is connected. A redemption code or subscription option is usable only when ItaRouter makes it available; upstream payment integrations are not an announcement of payment support here.

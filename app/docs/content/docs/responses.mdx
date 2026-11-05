@@ -1,0 +1,12 @@
+---
+title: Responses
+description: Use the Responses request format.
+---
+
+import { ApiReference } from '@/components/api-reference';
+
+Supply a model and an `input` string or input items. Read text from message content items in `output`, rather than `choices`. `previous_response_id` requires compatible upstream state and routing; it is not a promise of stored conversation history across every channel.
+
+These fields are generated from the bundled relay specification. Model access is in preparation; this page is a request-format reference, not a successful live request.
+
+<ApiReference path="/v1/responses" method="post" />
