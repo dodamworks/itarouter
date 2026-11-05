@@ -31,9 +31,22 @@ export const loginFormSchema = z.object({
 
 export const registerFormSchema = z
   .object({
-    username: z.string().min(1, 'Please enter your username'),
+    username: z
+      .string()
+      .trim()
+      .min(1, 'Please enter your username')
+      .refine(
+        (value) => [...value].length <= 20,
+        'Username must contain no more than 20 characters.'
+      ),
     email: z.string().optional(),
-    password: accountPasswordSchema,
+    password: accountPasswordSchema.refine(
+      (value) =>
+        /[A-Za-z]/.test(value) &&
+        /[0-9]/.test(value) &&
+        /[!-/:-@[-`{-~]/.test(value),
+      'Password must include a letter, a number, and a special character.'
+    ),
     confirmPassword: z.string().min(1, 'Please confirm your password'),
   })
   .refine((data) => data.password === data.confirmPassword, {

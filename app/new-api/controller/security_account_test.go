@@ -906,3 +906,55 @@ func TestSecurityAccountUnbindPreservesUsableLoginMethod(t *testing.T) {
 		})
 	}
 }
+
+func TestValidateRegistrationPassword(t *testing.T) {
+	for _, tc := range []struct {
+		name, password string
+		valid          bool
+	}{
+		{"numeric only", "12345678", false}, {"missing special", "Example123", false},
+		{"missing number", "Example!!", false}, {"missing letter", "1234567!", false},
+		{"minimum boundary", "Abcdef1!", true}, {"too short", "Abcde1!", false},
+		{"maximum boundary", strings.Repeat("a", 125) + "A1!", true},
+		{"over maximum", strings.Repeat("a", 126) + "A1!", false},
+		{"Unicode preserved", "한글🔒Abc1!", true}, {"space is not special", "Example1 ", false},
+		{"invalid UTF8", string([]byte{0xff}) + "Abcdef1!", false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			err := common.ValidateRegistrationPassword(tc.password)
+			if tc.valid {
+				assert.NoError(t, err)
+			} else {
+				assert.Error(t, err)
+			}
+		})
+	}
+}
+
+func TestRegistrationRejectsInvalidCredentialsBeforeDatabase(t *testing.T) {
+	oldRegister, oldPassword := common.RegisterEnabled, common.PasswordRegisterEnabled
+	common.RegisterEnabled, common.PasswordRegisterEnabled = true, true
+	t.Cleanup(func() { common.RegisterEnabled, common.PasswordRegisterEnabled = oldRegister, oldPassword })
+	for _, tc := range []struct{ name, username, password, message string }{
+		{"overlong username", "abcdefghijklmnopqrstu", "Example1!", "Username must contain no more than 20 characters."},
+		{"numeric password", "test-user", "12345678", "Password must include a letter, a number, and a special character."},
+		{"missing special", "test-user", "Example123", "Password must include a letter, a number, and a special character."},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			body, err := common.Marshal(map[string]string{"username": tc.username, "password": tc.password})
+			require.NoError(t, err)
+			w := httptest.NewRecorder()
+			c, _ := gin.CreateTestContext(w)
+			c.Request = httptest.NewRequest("POST", "/api/user/register", strings.NewReader(string(body)))
+			c.Request.Header.Set("Content-Type", "application/json")
+			Register(c)
+			var response struct {
+				Success bool   `json:"success"`
+				Message string `json:"message"`
+			}
+			require.NoError(t, common.Unmarshal(w.Body.Bytes(), &response))
+			assert.False(t, response.Success)
+			assert.Equal(t, tc.message, response.Message)
+		})
+	}
+}

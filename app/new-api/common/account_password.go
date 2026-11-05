@@ -38,6 +38,29 @@ func ValidateNewAccountPassword(password string) error {
 	return nil
 }
 
+// ValidateRegistrationPassword strengthens public signup without applying a new
+// composition policy to historical credentials during authentication.
+func ValidateRegistrationPassword(password string) error {
+	if err := ValidateNewAccountPassword(password); err != nil {
+		return err
+	}
+	var letter, number, special bool
+	for _, ch := range password {
+		switch {
+		case ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z':
+			letter = true
+		case ch >= '0' && ch <= '9':
+			number = true
+		case ch >= '!' && ch <= '/' || ch >= ':' && ch <= '@' || ch >= '[' && ch <= '`' || ch >= '{' && ch <= '~':
+			special = true
+		}
+	}
+	if !letter || !number || !special {
+		return errors.New("Password must include a letter, a number, and a special character.")
+	}
+	return nil
+}
+
 // HashAccountPassword is for account passwords, not MFA backup codes. The
 // temporary bcrypt mode permits rolling out dual-format readers to all nodes
 // before enabling Argon2id writes. Existing hashes are never rewritten in bulk.
