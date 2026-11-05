@@ -73,7 +73,7 @@ if (!rootElement) {
     if (typeof window === 'undefined' || typeof document === 'undefined') return
     const apply = (name: string) => {
       const title =
-        name === 'ItaRouter' ? 'ItaRouter — One API for AI models' : name
+        name === 'ItaRouter' ? 'ItaRouter — One API for AI models · New API' : name
       document.title = title
       const metaTitle = document.querySelector(
         'meta[name="title"]'
