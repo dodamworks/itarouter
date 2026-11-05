@@ -18,6 +18,6 @@ Do not publish provider/payment credentials, passwords, customer databases, sess
 4. For distributed images/binaries, verify the corresponding source and notices for those artifacts too.
 5. Update the matching source and change record when upstream or local changes are deployed.
 
-The project is in local development. A production release, release tag, complete dependency-source review and end-user source-download flow have not been validated yet.
+The public website is available at https://itarouter.com. Its footer links to the exact deployed source revision, license and notices. A release tag, a complete dependency-source review and a full dependency-source archive remain unverified.
 
 Read [LICENSE](LICENSE), [upstream NOTICE](NOTICE), [ItaRouter notice](ITAROUTER-NOTICE.md), [third-party notices](app/new-api/THIRD-PARTY-LICENSES.md) and the [local run guide](docs/development/LOCAL-RUN.md).
