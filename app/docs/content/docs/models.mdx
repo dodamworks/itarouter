@@ -1,0 +1,41 @@
+---
+title: Models
+description: Choose an exact model ID and check its capabilities and price.
+---
+
+The **Models** page is the public catalogue. It is different from the administrator's channel and model configuration screens: customers select models; ItaRouter manages the supply channels.
+
+## Choose a model
+
+1. Open **Models** from the website header.
+2. Find a model appropriate for your task and open its detail page.
+3. Copy the exact model ID, including any provider prefix or suffix shown.
+4. Check the route, input/output types, context limits, and displayed price before using it.
+
+The current live catalogue and connected channels determine availability. A model appearing in an upstream compatibility list is not automatically offered by ItaRouter.
+
+## Match the task and API format
+
+| Task | What to verify |
+| --- | --- |
+| Text conversation | Chat Completions, Responses, or Messages compatibility |
+| Images in a conversation | The model accepts image content and your selected request format can represent it |
+| Tool calling | Tools and the selected tool-choice mode are supported |
+| Embeddings | An embedding model and supported vector dimensions |
+| Image/audio/video generation | The specific modality, route, request shape, and billing unit |
+
+A shared API endpoint does not make every model support the same optional fields. An unsupported temperature, reasoning option, or output format can be rejected even when the model itself is available.
+
+## Context and output limits
+
+The context limit concerns the request's input and generated output according to the model's rules. Tool definitions, message history, and multimodal content can consume capacity too. A maximum-output setting is a ceiling, not a guarantee that the model will produce that many tokens.
+
+## Compare prices
+
+Read both the rate and its unit. Input and output can have different prices; cached input, reasoning, images, audio, or per-request charges can follow different rules. Do not multiply a per-million-token rate by a raw token count without dividing by the displayed unit.
+
+The selected group and current service pricing matter. The [usage record](/docs/usage-logs) is the place to investigate the charge for an actual request.
+
+## List IDs programmatically
+
+Use [GET /v1/models](/docs/list-models) with your ItaRouter key. The returned list can depend on your account group and key model restrictions. The basic OpenAI model-list format does not promise full pricing or capability metadata; use the catalogue as well.

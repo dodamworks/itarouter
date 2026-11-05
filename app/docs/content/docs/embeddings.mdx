@@ -1,0 +1,12 @@
+---
+title: Embeddings
+description: Convert text into embedding vectors.
+---
+
+import { ApiReference } from '@/components/api-reference';
+
+Choose an embedding model, not a chat model. `input` accepts a string or a string array in the bundled schema. Only request `dimensions` or a non-default encoding when the selected model supports it. Compare and index vectors from the same embedding configuration.
+
+These fields are generated from the bundled relay specification. Model access is in preparation; this page is a request-format reference, not a successful live request.
+
+<ApiReference path="/v1/embeddings" method="post" />

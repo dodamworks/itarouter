@@ -1,0 +1,46 @@
+{
+  "general_setting.docs_link": "/about",
+  "About": "# ItaRouter — Getting started\n\nItaRouter provides one API entry point for your applications and AI tools. Create an ItaRouter API key; you do not need to register an upstream provider key or configure channels.\n\n## Current availability\n\nItaRouter is preparing for launch. Model access and paid top-ups are not available yet. Check the model list and announcements before sending requests. Creating an API key does not add credit to your wallet.\n\n## 1. Create a key\n\nSign in, open **Console → API Keys**, and create a key for your app. Keep the key on your server; never put it in browser code or a public repository. Configure an expiry and key spending limit when needed. An unlimited key limit still uses your available wallet balance.\n\n## 2. Connect your app\n\nUse the ItaRouter base URL, followed by `/v1` for OpenAI-compatible clients, and your ItaRouter API key. For the public service, the intended base URL is `https://itarouter.com/v1`; local previews use their own local address instead. Only use a model ID listed as available in **Model Square**. Availability depends on the connected service and model.\n\n## 3. Check usage\n\nUse **Wallet** to check balance and **Usage Logs** to review requests and charges. Paid top-ups will open after payment setup and validation. No referral rewards are offered at this stage.\n\n## Source\n\nItaRouter is based on [New API](https://github.com/QuantumNous/new-api). [ItaRouter source and AGPL notices](https://github.com/dodamworks/itarouter).\n",
+  "console_setting.announcements_enabled": true,
+  "console_setting.announcements": [
+    {
+      "id": "launch-preparation",
+      "content": "ItaRouter is preparing for launch. Model access and paid top-ups are not available yet. See Docs for the customer guide.",
+      "publishDate": "2026-11-05T00:00:00+09:00",
+      "type": "ongoing"
+    }
+  ],
+  "console_setting.faq_enabled": true,
+  "console_setting.faq": [
+    {
+      "question": "Do I need my own provider key?",
+      "answer": "No. Use an ItaRouter-issued API key with your app. Provider channels are managed by ItaRouter."
+    },
+    {
+      "question": "Can I call models or add paid credit now?",
+      "answer": "Not yet. The service is preparing for launch. Available models and paid top-ups will be announced after setup and validation."
+    },
+    {
+      "question": "Does an unlimited API key mean free or unlimited usage?",
+      "answer": "No. The key limit and wallet balance are separate. API usage still requires sufficient wallet balance. Creating a key does not add credit."
+    },
+    {
+      "question": "Are referral rewards available?",
+      "answer": "No referral rewards are offered at this stage."
+    }
+  ],
+  "HeaderNavModules": {
+    "home": false,
+    "console": true,
+    "pricing": {
+      "enabled": true,
+      "requireAuth": false
+    },
+    "rankings": {
+      "enabled": false,
+      "requireAuth": false
+    },
+    "docs": true,
+    "about": false
+  }
+}

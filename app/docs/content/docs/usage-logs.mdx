@@ -1,0 +1,42 @@
+---
+title: Usage logs
+description: Find the request, read usage fields, and investigate a charge.
+---
+
+## Find a request
+
+Open **Console → Usage logs**. Use the available date/time, model, key, and log-type filters to narrow the results. Start with the time range around your request rather than searching the entire history.
+
+A dashboard aggregate is not a substitute for the individual request record. When investigating a discrepancy, inspect the detailed row and any billing details the console makes available.
+
+## Read the fields
+
+| Field | Meaning |
+| --- | --- |
+| Time | When the request was recorded |
+| Model | The model identifier recorded for the request |
+| API key/token name | Which named key made the request |
+| Input/prompt tokens | Input usage as recorded by the billing path |
+| Output/completion tokens | Generated usage as recorded by the billing path |
+| Duration | The elapsed processing time shown by the log view |
+| Streaming | Whether the request used streaming |
+| Group | The routing/pricing group recorded for the request |
+| Cost/quota | The charge in the configured display unit |
+
+Fields vary by request type. Image, audio, video, or asynchronous tasks may have different usage details. An unavailable field is not proof that the feature was free or unused.
+
+## Token counts and billing details
+
+Some paths use usage supplied by the provider; others may use estimated counts or additional billing details. Cached input and reasoning tokens may be shown separately where supported. Check the billing detail before treating the sum of two visible columns as the complete cost formula.
+
+## Investigate unexpected usage
+
+1. Match the request time and model to your application.
+2. Check the named key and group.
+3. Check whether your client retried or sent multiple requests.
+4. Compare request limits, input size, and returned usage.
+5. If you suspect key exposure, disable the key before continuing.
+
+## Share diagnostics safely
+
+For a software issue, share the route, model ID, approximate time, HTTP status, and a redacted error. Do not publish usable keys, passwords, verification codes, or private prompt/response content. Browser screenshots can contain account details; review them before sharing.

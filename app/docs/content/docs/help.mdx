@@ -1,0 +1,54 @@
+---
+title: Troubleshooting
+description: Use the response, key settings, and usage record to find the cause.
+---
+
+## Start with current availability
+
+Model access and paid top-ups are being prepared. A working website login or a newly created key does not establish that inference is enabled. Check the availability notice before diagnosing a new model integration.
+
+## Common response classes
+
+| Response | Check first | Next action |
+| --- | --- | --- |
+| `400` | JSON syntax, endpoint format, required fields, unsupported options | Reduce to the minimal request for that endpoint |
+| `401` | Missing, invalid, disabled, expired, or exhausted API key | Check key status, expiry and key allowance; do not use a console login token |
+| `403` | Account access, group, IP restrictions, or funding requirements | Read the error body and inspect the matching account/key setting |
+| `404` | URL, duplicate `/v1`, model or resource ID | Verify the full route and exact catalogue ID |
+| `429` | Request or token rate limit | Follow retry guidance; reduce concurrency instead of immediate loops |
+| `5xx` | Gateway/provider failure or unavailable channel | Inspect the error and request history before a bounded retry |
+
+These are diagnostic categories, not a complete mapping. The bundled billing path can return `403` for insufficient account quota, and key validation can return `401` for an exhausted limited key. The error body provides the more specific cause.
+
+## Read an error body
+
+An OpenAI-format error can look like this:
+
+```json
+{
+  "error": {
+    "message": "An explanation of why the request failed",
+    "type": "error_type",
+    "param": null,
+    "code": "error_code"
+  }
+}
+```
+
+These strings are placeholders, not guaranteed production error values. Native formats can have different shapes. Save the status and a redacted error message; do not assume a success response schema after a non-success status.
+
+## Key works in one environment but not another
+
+Compare the base URL, selected model, outgoing IP, key restrictions, and environment-variable loading. A server behind a different egress IP can fail an IP whitelist that works on your laptop.
+
+## Stream stops or looks empty
+
+Use the correct event parser for the selected endpoint. Chat Completions incremental text is in `delta`, while Responses and Messages use their own events. Check for client/proxy buffering and distinguish an incomplete stream from a normally finished one.
+
+## Cost appears higher than expected
+
+Check retries, model/group selection, input history, output limit, cache/reasoning/modality usage, and the billing unit. Inspect an individual [usage record](/docs/usage-logs), not only a dashboard total.
+
+## Safe issue report
+
+Include the approximate time, model ID, endpoint, HTTP status, and a redacted error. Remove keys, cookies, passwords, email verification codes, account details, and sensitive prompt content. The public software repository is not a private account-support channel.

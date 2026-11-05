@@ -1,0 +1,12 @@
+---
+title: Messages
+description: Use the Anthropic-compatible request format.
+---
+
+import { ApiReference } from '@/components/api-reference';
+
+Supply `model`, `messages`, and `max_tokens`, plus the `anthropic-version` header. Use your ItaRouter key through `x-api-key` or Bearer authentication. System instructions use the top-level `system` field. This format alone does not make every model Claude-compatible.
+
+These fields are generated from the bundled relay specification. Model access is in preparation; this page is a request-format reference, not a successful live request.
+
+<ApiReference path="/v1/messages" method="post" />

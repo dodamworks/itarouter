@@ -67,7 +67,7 @@ Logo는 아래 로고 안내에 따라 설정합니다. ServerAddress, Footer, A
 
 브랜드 자산은 `web/public/brand/itarouter-symbol.svg`(딥 틸 #087F78)와 `itarouter-horizontal.svg`다. 기존 관리자 `Logo` 설정에 `/brand/itarouter-symbol.svg`를 저장하고 `SystemName`은 `ItaRouter`로 유지한다. 설정은 DB별로 적용한다.
 
-로고는 기존 시스템 설정 경로로 홈·로그인·사이드바·푸터·동적 favicon에 표시된다. 초기 HTML favicon은 같은 SVG, `/favicon.ico`는 16/32/48px PNG 기반 ICO 대체 파일이다. 브랜드명에만 자체 호스팅 Geist 600과 -0.025em 자간을 적용한다. 라이선스는 `web/src/assets/fonts/Geist-OFL.txt`에 포함한다.
+로고는 기존 시스템 설정 경로로 홈·로그인·사이드바·푸터·동적 favicon에 표시된다. 초기 HTML favicon은 같은 SVG, `/favicon.ico`는 16/32/48px PNG 기반 ICO 대체 파일이다. 브랜드명에는 자체 호스팅 Geist 600과 -0.04em 자간을 적용한다. 기본 UI는 가변 Geist Sans, 코드는 Geist Mono를 사용하고 한글은 시스템 글꼴로 보완한다. 기본 라이트·다크 테마는 중립색 바탕과 틸 강조색을 사용하며 기존 사용자 테마·폰트·곡률·밀도 선택은 유지한다. 장식용 전체 대문자 변환은 해제하고 영문 라벨은 문장형 대소문자로 정리한다. 약어·식별자는 원래 표기를 유지한다. 라이선스는 `web/src/assets/fonts/Geist-OFL.txt`에 포함한다.
 
 미리보기 DB·인증 정보·실행 로그는 업로드하지 않습니다. 이 변경에 배포·도메인 연결·결제 설정은 포함하지 않습니다.
 
@@ -84,3 +84,8 @@ JSON의 `HeaderNavModules`와 `SidebarModulesAdmin`은 관리자 폼에서 각�
 메뉴 숨김은 기능 삭제나 서버 권한 제어가 아닙니다. 가입·인증·보안·역할·모델·가격·사용량 차감·결제 설정은 이 구성에서 변경하지 않습니다. 실제 메일 연결과 가입 정책 검증 전에는 로컬 가입 동작을 운영 준비 완료로 취급하지 않습니다. Wallet 화면을 유지해도 결제 수단 설정·승인이 없으면 실제 충전은 활성화되지 않습니다.
 
 검증은 일반 고객으로 홈 → 콘솔 → 키 목록 → 사용 기록 → Wallet → Profile/Security를 이동하고, 기존 관리자 설정 접근 차단과 새로고침·재시작 후 메뉴 유지 여부를 확인합니다. 실제 공급자 호출·키 발급·충전·결제는 다음 단계에서 검증합니다.
+
+
+## 고객 문서 미리보기
+
+별도 Fumadocs 앱은 `app/docs`에 있다. [문서 앱 실행 안내](../../app/docs/README.md)를 따른다. 문서는 `127.0.0.1:3019`, 기존 앱 미리보기는 `3018`을 사용한다. 로컬 Docs 설정 변경은 운영 설정에 반영되지 않는다. `NEXT_PUBLIC_SITE_URL`은 문서에서 연결할 공개 앱 주소이며 비밀값을 넣지 않는다. 정적 출력과 검색 인덱스는 `bun run build`로 생성하며 Git에 포함하지 않는다.

@@ -1,0 +1,26 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "---Get started---",
+    "api-keys",
+    "models",
+    "integrations",
+    "---API reference---",
+    "api",
+    "list-models",
+    "chat-completions",
+    "responses",
+    "messages",
+    "embeddings",
+    "gemini",
+    "---Request features---",
+    "streaming",
+    "tools-and-output",
+    "---Manage---",
+    "credits",
+    "usage-logs",
+    "help",
+    "source"
+  ]
+}

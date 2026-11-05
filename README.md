@@ -105,3 +105,7 @@ Start with an [issue](https://github.com/dodamworks/itarouter/issues) describing
 Based on New API under [AGPLv3](LICENSE). Read the [upstream NOTICE](NOTICE), [ItaRouter notice](ITAROUTER-NOTICE.md) and [third-party notices](app/new-api/THIRD-PARTY-LICENSES.md).
 
 Frontend design and development by New API contributors.
+
+## Customer documentation
+
+The [customer docs app](app/docs/README.md) provides English guides and API references. It runs separately from the gateway; hosting and the administrator Docs URL must be configured separately. The app interface supports ten languages, including the bundled customer FAQ. Custom administrator-authored content retains its original text when no translation is defined.

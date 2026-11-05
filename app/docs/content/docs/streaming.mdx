@@ -1,0 +1,46 @@
+---
+title: Streaming
+description: Read incremental output without treating it as ordinary JSON.
+---
+
+## Enable streaming
+
+For Chat Completions, send `stream: true`. Use a model and channel that support streaming. Add curl's `-N` flag to reduce output buffering:
+
+```bash
+curl -N https://itarouter.com/v1/chat/completions \
+  -H "Authorization: Bearer $ITAROUTER_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "MODEL_ID_FROM_CATALOGUE",
+    "messages": [{"role": "user", "content": "Hello"}],
+    "stream": true,
+    "stream_options": {"include_usage": true}
+  }'
+```
+
+`include_usage` is optional and depends on the supported billing/streaming path. Do not require every provider to emit identical usage fields.
+
+## Parse Server-Sent Events
+
+Chat Completions streaming uses `data:` events containing JSON chunks, followed by the completion marker where the protocol supplies it. An illustrative content event is:
+
+```text
+data: {"object":"chat.completion.chunk","choices":[{"index":0,"delta":{"content":"Hello"},"finish_reason":null}]}
+
+data: [DONE]
+```
+
+This is a protocol illustration, not output from a live ItaRouter model call. Append text from `choices[].delta.content`; do not expect each chunk to contain a complete `message`.
+
+Network reads do not align with event boundaries. One read can contain half an event or several events. Buffer until a complete event is available and handle empty lines correctly.
+
+## Use the selected format's events
+
+Responses and Messages use their own event types and payload shapes. Do not reuse a Chat Completions chunk parser for those formats. Tool-call arguments can also arrive in fragments; wait for the completed arguments before parsing and executing them.
+
+## Handle errors and cancellation
+
+Check the initial HTTP status before reading a stream. After the stream starts, a failure may be represented inside the stream or by an interrupted connection instead of a new HTTP status. Track whether you received a normal completion rather than treating any received text as full success.
+
+Cancelling the browser or closing the connection does not prove the upstream model stopped immediately, and does not guarantee zero charges. Review the [usage record](/docs/usage-logs) before submitting a retry.

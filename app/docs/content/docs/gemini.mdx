@@ -1,0 +1,40 @@
+---
+title: Gemini format
+description: Understand the native Gemini route and content shape.
+---
+
+## Native request format
+
+The bundled gateway has Gemini-native routing in addition to OpenAI-compatible routes. The common path shape is:
+
+```text
+POST /v1beta/models/{model}:generateContent
+```
+
+Use a model ID enabled for this format. Native Gemini routes are not the same endpoint as `/v1/chat/completions`.
+
+## Minimal text request
+
+The following is an illustrative native request. It is not a live model test or an image-generation configuration:
+
+```bash
+curl "https://itarouter.com/v1beta/models/MODEL_ID_FROM_CATALOGUE:generateContent" \
+  -H "x-goog-api-key: $ITAROUTER_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contents": [{
+      "role": "user",
+      "parts": [{"text": "Hello"}]
+    }]
+  }'
+```
+
+The native content shape uses `contents` and `parts`. Responses commonly place generated content under `candidates`; do not parse them as OpenAI `choices`.
+
+## Model-specific options
+
+Multimodal options, output modalities, image settings, safety settings, and streaming differ by model and route. Use the model's supported configuration. A provider-specific image example in an upstream document should not be treated as the general text request contract.
+
+## Choose the client format
+
+If your client only accepts an OpenAI-compatible base URL, use that supported format with an appropriate model instead of inserting a native Gemini path into the client's base URL. If your client expects native Gemini, configure its endpoint and authentication according to that client's native-provider settings.

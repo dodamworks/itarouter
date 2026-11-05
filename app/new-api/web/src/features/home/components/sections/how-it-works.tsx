@@ -27,10 +27,8 @@ export function HowItWorks() {
   const steps = [
     {
       num: '1',
-      title: t('Configure'),
-      desc: t(
-        'Add your API keys, set up channels and configure access permissions'
-      ),
+      title: t('Create API Key'),
+      desc: t('Create a key for your app or service'),
       icon: <Settings className='size-6' strokeWidth={1.5} />,
     },
     {
@@ -53,9 +51,6 @@ export function HowItWorks() {
     <section className='border-border/40 relative z-10 border-t px-6 py-24 md:py-32'>
       <div className='mx-auto max-w-6xl'>
         <AnimateInView className='mb-16 text-center md:mb-20'>
-          <p className='text-muted-foreground mb-3 text-xs font-medium tracking-widest uppercase'>
-            {t('How It Works')}
-          </p>
           <h2 className='text-2xl font-bold tracking-tight md:text-3xl'>
             {t('Three steps to get started')}
           </h2>

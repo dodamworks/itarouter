@@ -80,3 +80,33 @@
 - README 기본 언어를 영어로 정리하고 지원하는 10개 언어의 README를 연결. 제품 소개·현재 개발 상태·포함된 기능·빌드 명령·원본 안내와 고지를 같은 범위로 제공.
 - 원본 New API README와 번역본은 `app/new-api/`에 보존하고 재사용 안내를 연결. 원본 프로젝트의 릴리스·후원·제휴를 ItaRouter의 실적으로 표시하지 않음.
 - 로컬 실행 안내는 영어 기본과 한국어판으로 제공. SOURCE 문서는 실제 수정본이 포함된 현재 트리와 버전별 소스 제공 절차에 맞춤.
+
+## 2026-11-05 — Customer guidance (local review)
+
+- Reuse the existing Docs link, About, announcement and FAQ settings with a reviewable customer-guidance preset.
+- Replace operator setup instructions on the home page with existing translated customer API-key guidance.
+- Omit the referral card and its request/transfer wiring from the wallet page while preserving upstream components, endpoints and stored data.
+- Keep payment, authentication, balances and settlement behavior unchanged.
+
+- Refine the existing Geist 600 wordmark to -0.04em tracking, enlarge the public header lockup and align console branding. Preserve the symbol and deep teal; omit the public logo hover scaling.
+
+- Unify the default light/dark theme with neutral surfaces and teal actions; add self-hosted variable Geist Sans/Mono with original font licenses. Preserve explicit theme preferences.
+- Refine shared controls, page titles and home decoration; use authored casing and sentence-case English labels without changing translation keys or API identifiers.
+
+- Balance translated home headlines without a forced line break, preserve Korean word boundaries, and remove the decorative pulsing badge, background grid and hero entrance/hover movement. Keep navigation and API demos intact.
+
+- Remove the supported-app recommendations from the home page, align the desktop title color boundary with the line break, and lift dark surfaces to charcoal.
+
+- Use the concise homepage message “Many AI models. One API.” with translated customer guidance and existing CTA routes; center the desktop hero columns while retaining the mobile stack.
+
+- Simplify public navigation to configured customer destinations with a GitHub source link; show product/resource footer links and preserve upstream attribution. Omit unsupported homepage scale/performance promotion while keeping the underlying components available.
+
+- Add a separate static Fumadocs customer documentation app with eight guides, local search, page navigation, code examples and ItaRouter typography/theme. Keep the existing New API application and production settings unchanged.
+
+- Expand customer documentation from bundled source and specifications; add generated request/response references for five core endpoints with placeholder authentication and no live playground.
+
+- Link the documentation brand to the service home; add language selection to the mobile public header. Make homepage API examples manually selected and distinguish an empty model catalogue from filtered results while preserving available-model controls.
+
+- Reuse the homepage feature section for model discovery, per-app keys and usage review; connect each to its guide. Reuse configured customer FAQs and the shared accordion on the homepage, and clarify signup/model/documentation actions.
+
+- Translate the bundled FAQ into all ten app languages while preserving custom administrator text. Center desktop navigation, clarify the browser title and retain reduced-motion-aware section entrances. Customer documentation remains English.
