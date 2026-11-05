@@ -1,5 +1,12 @@
 # ItaRouter 변경 기록
 
+## Signup validation and recovery — 2026-11-05
+
+- Renew consumed Turnstile challenges after rejected signup and email-code requests while preserving form values; clear expired verification and clean up widget instances.
+- Explain and validate the 20-character username limit before submission, with a readable server rejection.
+- Require 8–128 characters with an English letter, a digit and a special character for new public registrations, enforced in the UI and server. Existing login and other password-setting flows retain their current policy.
+- Update guidance in all ten interface languages and add regression coverage for challenge renewal, expiry, script loading, credential limits and historical login compatibility.
+
 ## 초기 기반 준비 — 2026-11-04
 
 - New API commit `45746eee4de25ab1eb75d4b7fbb8de2199483ea3` 원본을 app/new-api/에 포함.

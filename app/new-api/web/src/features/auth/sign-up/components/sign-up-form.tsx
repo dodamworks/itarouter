@@ -31,6 +31,7 @@ import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -90,6 +91,7 @@ export function SignUpForm({
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
+    mode: 'onBlur',
     defaultValues: {
       username: '',
       email: '',
@@ -182,11 +184,17 @@ export function SignUpForm({
       )
     } finally {
       setIsLoading(false)
+      // Siteverify consumes tokens even when registration is rejected.
+      setTurnstileToken('')
+      setTurnstileWidgetKey((current) => current + 1)
     }
   }
 
   async function handleSendVerificationCode() {
-    if (await sendCode(emailValue || '')) {
+    if (!emailValue || !validateTurnstile()) return
+    try {
+      await sendCode(emailValue)
+    } finally {
       setTurnstileToken('')
       setTurnstileWidgetKey((current) => current + 1)
     }
@@ -259,8 +267,15 @@ export function SignUpForm({
             <FormItem>
               <FormLabel>{t('Username')}</FormLabel>
               <FormControl>
-                <Input placeholder={t('Enter your username')} {...field} />
+                <Input
+                  placeholder={t('Enter your username')}
+                  autoComplete='username'
+                  {...field}
+                />
               </FormControl>
+              <FormDescription>
+                {t('Use no more than 20 characters.')}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -276,9 +291,15 @@ export function SignUpForm({
               <FormControl>
                 <PasswordInput
                   placeholder={t('Enter password (8–128 characters)')}
+                  autoComplete='new-password'
                   {...field}
                 />
               </FormControl>
+              <FormDescription>
+                {t(
+                  'Use 8–128 characters, including a letter, a number, and a special character.'
+                )}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -357,6 +378,7 @@ export function SignUpForm({
               key={turnstileWidgetKey}
               siteKey={turnstileSiteKey}
               onVerify={setTurnstileToken}
+              onExpire={() => setTurnstileToken('')}
             />
           </div>
         )}

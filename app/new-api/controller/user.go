@@ -235,6 +235,14 @@ func Register(c *gin.Context) {
 		common.ApiErrorT(c, "Invalid parameters")
 		return
 	}
+	if len([]rune(user.Username)) > 20 {
+		common.ApiErrorT(c, "Username must contain no more than 20 characters.")
+		return
+	}
+	if err := common.ValidateRegistrationPassword(user.Password); err != nil {
+		common.ApiErrorT(c, err.Error())
+		return
+	}
 	if err := common.Validate.Struct(&user); err != nil {
 		common.ApiErrorT(c, "Invalid input {{error}}", map[string]any{"error": err.Error()})
 		return
