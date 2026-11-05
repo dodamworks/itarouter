@@ -7,6 +7,14 @@
 - Require 8–128 characters with an English letter, a digit and a special character for new public registrations, enforced in the UI and server. Existing login and other password-setting flows retain their current policy.
 - Update guidance in all ten interface languages and add regression coverage for challenge renewal, expiry, script loading, credential limits and historical login compatibility.
 
+## README refresh — 2026-11-05
+
+- Reorganized the English README and all nine translations around capabilities, current development status, local setup, languages and contributions.
+- Matched the reference header order: centered logo and name, one-line description, license-first badges, quick links and a collapsible language selector. No CI or release badge is shown without a matching workflow or release.
+- Added clone, build and startup instructions with a persistent local database and session secret; clarified environment-specific branding settings.
+- Linked the public website and documented email verification and Turnstile signup while keeping provider connections, live payments and Auto marked as unconfigured. Updated source status and the modification manifest.
+- Preserved upstream attribution and license links. No application behavior or upstream source changed.
+
 ## 초기 기반 준비 — 2026-11-04
 
 - New API commit `45746eee4de25ab1eb75d4b7fbb8de2199483ea3` 원본을 app/new-api/에 포함.
